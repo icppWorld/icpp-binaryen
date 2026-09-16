@@ -83,9 +83,10 @@ Feature work never happens on `main`. One feature = one branch name, and that
 
 ## Ceremony 1 — Plan
 
-1. Start from the roadmap: HANDOVER.md sections 4 (integration phases) and 5
-   (open decisions). Check it before and after; record resolved decisions in
-   place.
+1. Start from the roadmap: `todo/feature-inventory.html` and its published
+   Claude artifact (same URL every time, recorded in `todo/artifacts.md`).
+   Check it before and after. HANDOVER.md sections 4-5 remain the background
+   design document; record resolved open decisions there in place.
 2. Explore first: what does `binaryen-c.h` of the **bundled** Binaryen version
    offer (the header is in every official release tarball), what does
    `llama_cpp_canister/scripts/optimize_wasm.py` need, what exists in
@@ -184,11 +185,17 @@ For every user-facing capability:
 
 ## Ceremony 6 — Track & commit
 
-1. The roadmap is HANDOVER.md sections 4-5: update phase status and resolved
-   open decisions in the same sitting as the work that changes them.
+1. The roadmap lives in TWO synchronized places: the file
+   `todo/feature-inventory.html` and its published Claude artifact (same URL
+   every time, recorded in `todo/artifacts.md`). Every roadmap edit updates
+   the file AND republishes the artifact in the same sitting — never one
+   without the other.
 2. Statuses reflect **merge state, not commit state**: work on a feature
-   branch / open PR is "in progress" or "in review" — never "done" until
-   every PR of the feature has merged.
+   branch / open PR is "in progress" or "in review" (with the PR links) —
+   never "done" until every PR of the feature has merged; "done" is set via
+   a roadmap-only commit on `main` plus the artifact republish. When an item
+   is split, the parts keep the parent's id (e.g. `02a`/`02b`) instead of
+   being renumbered.
 3. Commits: single-line message, no description body, no `Co-Authored-By`
    trailers, never `--no-verify`. One commit per repo, on the shared
    `feature/<slug>` branch. Push only when the maintainer says so.

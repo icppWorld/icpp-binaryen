@@ -211,12 +211,19 @@ GitHub releases page (tag `version_116`).
 
 ## 5. Open decisions
 
-1. **Linux aarch64 wheel in the first release?** The current Docker pipeline is
-   x86_64-linux; macOS dev machines use native dylibs. Recommend: x86_64-linux plus
+Resolved 2026-09-16 (feature `01 initial-package`, see `todo/feature-inventory.html`):
+
+1. **Linux aarch64 wheel in the first release?** ~~Open~~ → **No.** x86_64-linux plus
    both macOS archs first, add aarch64-linux when something needs it (YAGNI).
-2. **manylinux strategy** if `auditwheel` rejects the relinked official `.a` (see
-   section 2). Decide only when the first wheel exists.
-3. **Python floor**: `>=3.10` is free with ABI-mode cffi; icpp-pro currently supports
-   3.11. Pick the floor to match icpp-pro's documented support matrix.
-4. **Where the parity-test wasm fixture lives**: checked into this repo (a few MB) or
-   fetched from a llama_cpp_canister release asset in CI.
+2. **manylinux strategy** — `auditwheel show` runs in the ubuntu CI on every build
+   (early check); `auditwheel repair` retags at release. Fallback (source build in a
+   manylinux container) only if auditwheel rejects the relinked official `.a`.
+3. **Python floor**: **`>=3.11`**, matching icpp-pro's documented support matrix.
+4. **Where the parity-test wasm fixture lives**: **neither checked in nor fetched.**
+   `make parity-test` uses the sibling checkout's
+   `../llama_cpp_canister/build/llama_cpp_before_opt.wasm` and compares against the
+   recorded golden hashes in `test/parity/golden-116.json` (input + output sha256).
+   Parity vs `binaryen.py==0.0.2` was verified byte-identical on macOS arm64 on
+   2026-09-16. NOTE: llama's final `build/llama_cpp.wasm` is NOT a valid comparison
+   target — icpp-pro appends metadata custom sections (`icp:public candid:service`,
+   `cdk:name`) after the post_wasm hook runs.

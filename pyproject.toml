@@ -1,0 +1,53 @@
+# Declare python project metadata
+# https://packaging.python.org/en/latest/guides/writing-pyproject-toml/
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "icpp-binaryen"
+description = "cffi bindings over Binaryen's C API with the official Binaryen shared library bundled per platform"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "icpp-pro", email = "icpp@icpp.world" }]
+maintainers = [{ name = "icpp-pro", email = "icpp@icpp.world" }]
+license = { file = "LICENSE" }
+keywords = [
+    "Binaryen",
+    "WebAssembly",
+    "wasm",
+    "Internet Computer",
+    "blockchain",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3 :: Only",
+]
+dependencies = ["cffi>=1.15.1"]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+dev = [
+    "black==26.3.1",
+    "pylint==3.3.4",
+    "mypy==1.13.0",
+    "build==1.2.2",
+    "twine==6.0.1",
+    "pytest==8.3.4",
+    "types-cffi==2.1.0.20260827",
+    "wasmtime==29.0.0",
+]
+
+[project.urls]
+Homepage = "https://www.onicai.com/"
+Documentation = "https://docs.icpp.world/"
+Repository = "https://github.com/icppWorld/icpp-binaryen"
+Issues = "https://github.com/icppWorld/icpp-binaryen/issues"
+Changelog = "https://github.com/icppWorld/icpp-binaryen/blob/main/CHANGELOG.md"
