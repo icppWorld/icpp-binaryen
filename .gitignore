@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+
+# The bundled Binaryen library is fetched by `make get-binaryen`, never committed
+src/icpp_binaryen/lib/
+
+# Editors / OS
+.vscode/
+.DS_Store
+
+# Local scratch
+*.wasm

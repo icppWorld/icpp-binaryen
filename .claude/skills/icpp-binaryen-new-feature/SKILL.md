@@ -12,8 +12,9 @@ order. This skill is the checklist; the guide is the source of truth.
 
 ## 1. Plan (guide Ceremony 1)
 
-- Check the roadmap first: HANDOVER.md sections 4 (integration phases) and 5
-  (open decisions).
+- Check the roadmap first: `todo/feature-inventory.html` (+ its artifact,
+  URL in `todo/artifacts.md`). HANDOVER.md sections 4-5 are the background
+  design document.
 - Reference material: `binaryen-c.h` of the **bundled** Binaryen version (in
   the official release tarball), and
   `../llama_cpp_canister/scripts/optimize_wasm.py` (the consumer).
@@ -56,9 +57,12 @@ Then run the downstream tier that matches the change — see the
 
 ## 4. Track & commit (guide Ceremony 6)
 
-- Update HANDOVER.md phase status / resolved decisions in the same sitting
-  as the work that changes them.
+- The roadmap = `todo/feature-inventory.html` AND its published Claude
+  artifact (same URL, see `todo/artifacts.md`). Every edit updates BOTH in
+  the same sitting — never the file without republishing the artifact.
 - Statuses reflect merge state: an open PR is "in review", NEVER "done".
+  "done" happens only after all PRs merged, via a roadmap-only commit on
+  main + republish. Split items keep the parent id (02a/02b).
 - Commit per repo on the shared `feature/<slug>` branch: single-line
   message, no trailers, no `--no-verify`. Push only when the user asks.
 - PRs: one per changed repo from the same branch name, cross-referencing the

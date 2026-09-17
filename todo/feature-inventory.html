@@ -1,0 +1,333 @@
+<title>icpp-binaryen Feature Inventory</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --bg:        #f7f6f3;
+    --surface:   #fdfdfb;
+    --ink:       #16211f;
+    --ink-2:     #4d5a57;
+    --muted:     #83908c;
+    --line:      #e1e2dc;
+    --line-soft: #ecede8;
+    --accent:    #0e6e6e;
+    --accent-bg: #e4efee;
+    --good:      #0ca30c;
+    --good-text: #006300;
+    --critical:  #d03b3b;
+    --serious:   #ec835a;
+    --miss-fill: #c9cdc6;
+    --chip-bg:   #f0f1ec;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:        #101413;
+      --surface:   #181d1b;
+      --ink:       #eef2f0;
+      --ink-2:     #b6c1bd;
+      --muted:     #87938f;
+      --line:      #2b312e;
+      --line-soft: #232926;
+      --accent:    #52b3ac;
+      --accent-bg: #1b2b29;
+      --good:      #0ca30c;
+      --good-text: #4cc44c;
+      --critical:  #d03b3b;
+      --serious:   #ec835a;
+      --miss-fill: #3a413d;
+      --chip-bg:   #222825;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg:        #101413;
+    --surface:   #181d1b;
+    --ink:       #eef2f0;
+    --ink-2:     #b6c1bd;
+    --muted:     #87938f;
+    --line:      #2b312e;
+    --line-soft: #232926;
+    --accent:    #52b3ac;
+    --accent-bg: #1b2b29;
+    --good:      #0ca30c;
+    --good-text: #4cc44c;
+    --critical:  #d03b3b;
+    --serious:   #ec835a;
+    --miss-fill: #3a413d;
+    --chip-bg:   #222825;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    padding-inline: 16px;
+    padding-block: 0 64px;
+  }
+  .wrap { max-width: 940px; margin: 0 auto; }
+  code, .mono { font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+  header.masthead { padding-block: 44px 28px; border-bottom: 2px solid var(--ink); }
+  .eyebrow {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--accent); margin: 0 0 10px;
+  }
+  h1 { font-size: 34px; font-weight: 700; line-height: 1.15; margin: 0 0 12px; text-wrap: balance; }
+  .standfirst { color: var(--ink-2); max-width: 62ch; margin: 0; }
+  .meta { display: flex; flex-wrap: wrap; gap: 6px 22px; margin-top: 18px;
+          font-size: 13px; color: var(--muted); }
+  .meta code { font-size: 12px; color: var(--ink-2); }
+
+  section { margin-top: 44px; }
+  h2 { font-size: 21px; font-weight: 600; margin: 0 0 6px; text-wrap: balance; }
+  .kicker {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11.5px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 4px;
+  }
+  section > p { max-width: 68ch; color: var(--ink-2); }
+  section > p strong { color: var(--ink); }
+
+  /* ---- summary tiles ---- */
+  .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 22px 0 18px; }
+  @media (max-width: 640px) { .tiles { grid-template-columns: repeat(2, 1fr); } }
+  .tile { background: var(--surface); border: 1px solid var(--line); border-radius: 6px;
+          padding: 14px 16px; }
+  .tile .v { font-family: "IBM Plex Mono", ui-monospace, monospace;
+             font-size: 30px; font-weight: 600; line-height: 1.1; }
+  .tile .l { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+  .tile.good .v     { color: var(--good-text); }
+  .tile.accent .v   { color: var(--accent); }
+
+  /* ---- feature table ---- */
+  .tblwrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line);
+             border-radius: 6px; margin-top: 18px; }
+  table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 14px; }
+  th { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 11px;
+       font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
+       color: var(--muted); text-align: left; padding: 10px 14px;
+       border-bottom: 1px solid var(--line); }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--line-soft);
+       vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  td.id { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 13px;
+          color: var(--ink-2); white-space: nowrap; }
+
+  .chip { display: inline-block; font-family: "IBM Plex Mono", ui-monospace, monospace;
+          font-size: 11px; font-weight: 500; letter-spacing: .04em;
+          border-radius: 4px; padding: 2px 8px; white-space: nowrap; }
+  .chip.progress { background: var(--accent-bg); color: var(--accent); }
+  .chip.planned  { background: var(--chip-bg); color: var(--muted); }
+  .chip.done     { background: var(--accent-bg); color: var(--good-text); }
+  .chip.bytes    { background: var(--chip-bg); color: var(--ink-2); }
+  .chip.hash     { background: var(--chip-bg); color: var(--serious); }
+
+  /* ---- feature detail ---- */
+  .feature { background: var(--surface); border: 1px solid var(--line); border-radius: 6px;
+             padding: 18px 20px; margin-top: 14px; }
+  .feature h3 { margin: 0; font-size: 16px; font-weight: 600;
+                display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+  .feature h3 .fid { font-family: "IBM Plex Mono", ui-monospace, monospace;
+                     font-size: 13px; font-weight: 500; color: var(--muted); }
+  .feature p { margin: 10px 0 0; color: var(--ink-2); max-width: 72ch; }
+  .feature .facts { display: flex; flex-wrap: wrap; gap: 6px 20px; margin-top: 12px;
+                    font-size: 13px; color: var(--muted); }
+  .feature .facts code { font-size: 12px; color: var(--ink-2); }
+
+  .rules { border-left: 3px solid var(--accent); background: var(--surface);
+           padding: 14px 18px; border-radius: 0 6px 6px 0; margin-top: 18px; }
+  .rules ul { margin: 8px 0 0; padding-left: 18px; color: var(--ink-2); }
+  .rules li { margin-top: 6px; }
+  .rules li strong { color: var(--ink); }
+</style>
+
+<div class="wrap">
+
+<header class="masthead">
+  <p class="eyebrow">icppWorld &middot; Roadmap</p>
+  <h1>icpp-binaryen Feature Inventory</h1>
+  <p class="standfirst">
+    The tracked features of <code>icpp-binaryen</code> &mdash; the cffi-over-Binaryen
+    package that fixes the IC globals limit (<code>IC0505</code>) &mdash; from the initial
+    116.0.0 release through the integration phases into llama_cpp_canister
+    and icpp-pro. Statuses reflect <em>merge</em> state, never commit state.
+  </p>
+  <div class="meta">
+    <span>File: <code>todo/feature-inventory.html</code></span>
+    <span>Repo: <code>icppWorld/icpp-binaryen</code></span>
+    <span>Updated: <code>2026-09-17</code></span>
+  </div>
+</header>
+
+<section>
+  <p class="kicker">Coverage</p>
+  <h2>Where the roadmap stands</h2>
+  <div class="tiles">
+    <div class="tile"><div class="v">5</div><div class="l">features tracked</div></div>
+    <div class="tile accent"><div class="v">1</div><div class="l">in review</div></div>
+    <div class="tile"><div class="v">4</div><div class="l">planned</div></div>
+    <div class="tile good"><div class="v">0</div><div class="l">done</div></div>
+  </div>
+</section>
+
+<section>
+  <p class="kicker">Inventory</p>
+  <h2>Features</h2>
+  <div class="tblwrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Feature</th>
+          <th>Output bytes</th>
+          <th>Repos touched</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="id">01</td>
+          <td><code>initial-package</code> &mdash; the 116.0.0 release</td>
+          <td><span class="chip bytes">establishes baseline</span></td>
+          <td>icpp-binaryen</td>
+          <td><span class="chip progress">in review</span></td>
+        </tr>
+        <tr>
+          <td class="id">02</td>
+          <td><code>llama-migration</code> &mdash; Phase 1 switchover</td>
+          <td><span class="chip bytes">byte-identical</span></td>
+          <td>icpp-binaryen, llama_cpp_canister</td>
+          <td><span class="chip planned">planned</span></td>
+        </tr>
+        <tr>
+          <td class="id">03</td>
+          <td><code>icpp-pro-integration</code> &mdash; Phase 2 built-in fix</td>
+          <td><span class="chip bytes">byte-identical</span></td>
+          <td>icpp-binaryen, icpp-pro, icpp-docs</td>
+          <td><span class="chip planned">planned</span></td>
+        </tr>
+        <tr>
+          <td class="id">04</td>
+          <td><code>binaryen-132-bump</code> &mdash; new bundled Binaryen</td>
+          <td><span class="chip hash">hash-changing</span></td>
+          <td>icpp-binaryen, llama_cpp_canister, icpp-pro</td>
+          <td><span class="chip planned">planned</span></td>
+        </tr>
+        <tr>
+          <td class="id">05</td>
+          <td><code>cleanup</code> &mdash; Phase 3 retirement of the old path</td>
+          <td><span class="chip bytes">byte-identical</span></td>
+          <td>llama_cpp_canister, icppWorld/binaryen.py</td>
+          <td><span class="chip planned">planned</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <p class="kicker">Detail</p>
+  <h2>What each feature covers</h2>
+
+  <div class="feature">
+    <h3><span class="fid">01</span> initial-package <span class="chip progress">in review</span></h3>
+    <p>
+      The 116.0.0 package itself: hand-curated cffi cdef, <code>Module</code> wrapper,
+      <code>fix_globals_limit</code>, unit + smoke pytest suites, the byte-identical
+      parity gate against <code>binaryen.py==0.0.2</code>, per-platform wheel CI, and
+      the tag-triggered trusted-publishing release workflow.
+    </p>
+    <div class="facts">
+      <span>Branch: <code>feature/initial-package</code></span>
+      <span>Gate: parity golden <code>test/parity/golden-116.json</code></span>
+      <span>PR: <a href="https://github.com/icppWorld/icpp-binaryen/pull/1">icpp-binaryen#1</a></span>
+    </div>
+  </div>
+
+  <div class="feature">
+    <h3><span class="fid">02</span> llama-migration <span class="chip planned">planned</span></h3>
+    <p>
+      Phase 1 (HANDOVER &sect;4): llama_cpp_canister replaces
+      <code>binaryen.py==0.0.2</code> with <code>icpp-binaryen==116.0.0</code> in
+      <code>requirements.txt</code> and <code>docker/docker-compose.yml</code>;
+      <code>scripts/optimize_wasm.py</code> shrinks to a thin
+      <code>fix_globals_limit</code> call; the Dockerfile.base relink + sed hack is
+      deleted (host-side Linux builds start working). Also lands the
+      <code>downstream-verify-api</code> / <code>downstream-verify-full</code> make
+      targets in this repo. Byte-identical: no new WASM-HASHES row, verified
+      by rebuild.
+    </p>
+    <div class="facts">
+      <span>Depends on: <code>01</code> released</span>
+      <span>Repos: <code>llama_cpp_canister</code> + this repo</span>
+    </div>
+  </div>
+
+  <div class="feature">
+    <h3><span class="fid">03</span> icpp-pro-integration <span class="chip planned">planned</span></h3>
+    <p>
+      Phase 2: icpp-pro adds <code>icpp-binaryen</code> as a lockstep-pinned
+      dependency and <code>icpp build-wasm</code> runs <code>fix_globals_limit</code>
+      as a built-in post-link step &mdash; after wasi2ic, before the user's
+      <code>post_wasm_function</code> &mdash; behind an on-by-default
+      <code>fix_globals_limit = true</code> flag in <code>icpp.toml</code>. The
+      <code>_before_opt</code> backup becomes an icpp-pro convention; ordering
+      contract documented in icpp-docs.
+    </p>
+    <div class="facts">
+      <span>Depends on: <code>02</code> merged</span>
+      <span>Pin check: <code>make -C ../icpp-pro check-sibling-pins</code></span>
+    </div>
+  </div>
+
+  <div class="feature">
+    <h3><span class="fid">04</span> binaryen-132-bump <span class="chip planned">planned</span></h3>
+    <p>
+      A deliberate major release bundling Binaryen 132 (or newer). The
+      emitted wasm bytes change, so this carries the full downstream
+      hash-change ceremony: a new WASM-HASHES row via llama_cpp_canister's
+      release process and, once Phase 2 has landed, an icpp-pro release. The
+      parity golden is re-established for the new major.
+    </p>
+    <div class="facts">
+      <span>Output bytes: <span class="chip hash">hash-changing</span></span>
+      <span>Needs explicit maintainer sign-off in the plan</span>
+    </div>
+  </div>
+
+  <div class="feature">
+    <h3><span class="fid">05</span> cleanup <span class="chip planned">planned</span></h3>
+    <p>
+      Phase 3: llama_cpp_canister deletes <code>scripts/optimize_wasm.py</code> and
+      the <code>post_wasm_function</code> line from <code>icpp.toml</code> (the built-in
+      Phase 2 step covers it), and the dormant <code>icppWorld/binaryen.py</code>
+      fork is archived.
+    </p>
+    <div class="facts">
+      <span>Depends on: <code>03</code> merged</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <p class="kicker">Ceremony</p>
+  <h2>How this inventory is maintained</h2>
+  <div class="rules">
+    Rules from <code>README-feature-guide.md</code>, Ceremonies 1 &amp; 6:
+    <ul>
+      <li><strong>Two synchronized places:</strong> this file and its published
+          Claude artifact (URL in <code>todo/artifacts.md</code>). Every edit updates
+          the file AND republishes the artifact in the same sitting.</li>
+      <li><strong>Statuses reflect merge state:</strong> an open PR marks an item
+          <em>in progress</em> / <em>in review</em> (with the PR links), never
+          <em>done</em>. Done happens only after every PR of the feature has
+          merged, as a roadmap-only commit on <code>main</code> plus republish.</li>
+      <li><strong>Split items keep the parent id</strong> (e.g. <code>02a</code> /
+          <code>02b</code>) &mdash; no renumbering, so history and references stay
+          stable.</li>
+    </ul>
+  </div>
+</section>
+
+</div>
