@@ -8,6 +8,7 @@ import pathlib
 import sys
 
 from setuptools import find_packages, setup
+from setuptools.dist import Distribution
 
 try:
     from setuptools.command.bdist_wheel import bdist_wheel
@@ -20,17 +21,25 @@ sys.path.append(str(here / "src/icpp_binaryen"))
 import version  # type: ignore
 
 
+class BinaryDistribution(Distribution):  # type: ignore[misc]
+    """Force a platlib wheel (Root-Is-Purelib: false).
+
+    The bundled libbinaryen makes the wheel platform specific even though
+    there is no compiled extension module. Claiming ext_modules is the
+    setuptools-version-proof way to get a platlib wheel; auditwheel refuses
+    to analyze a purelib wheel that carries a shared library.
+    """
+
+    def has_ext_modules(self) -> bool:
+        return True
+
+
 class BdistWheelPlatform(bdist_wheel):  # type: ignore[misc]
     """Tag the wheel py3-none-<platform>.
 
     ABI-mode cffi needs no compiled extension module, so one wheel per
-    platform covers every supported Python version; the bundled libbinaryen
-    makes the wheel platform specific.
+    platform covers every supported Python version >= 3.11.
     """
-
-    def finalize_options(self) -> None:
-        super().finalize_options()
-        self.root_is_pure = False
 
     def get_tag(self) -> tuple[str, str, str]:
         _, _, plat = super().get_tag()
@@ -49,5 +58,6 @@ setup(
             "py.typed",
         ]
     },
+    distclass=BinaryDistribution,
     cmdclass={"bdist_wheel": BdistWheelPlatform},
 )
