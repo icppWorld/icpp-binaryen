@@ -1,5 +1,5 @@
 {
   "input": "llama_cpp_before_opt.wasm",
-  "input_sha256": "80d4cbfba015d3aaea4756ff8347b6c6e3c392d3f99301ab717919ec5e47199d",
-  "output_sha256": "c186f1ad9f6853c46fb42660725c248713d53dd6852c0b131638fdaacded9048"
+  "input_sha256": "809ddaeaad2762d8b2d80c85fa1aa35c0f40d477a474eb484c6ac6b895d14f4f",
+  "output_sha256": "073fa587962e85aef337f1955523f2ee8dfbe265ef7393f25bde30d8133c1cf8"
 }
