@@ -156,7 +156,7 @@
   <div class="meta">
     <span>File: <code>todo/feature-inventory.html</code></span>
     <span>Repo: <code>icppWorld/icpp-binaryen</code></span>
-    <span>Updated: <code>2026-09-17</code></span>
+    <span>Updated: <code>2026-09-21</code></span>
   </div>
 </header>
 
@@ -166,8 +166,8 @@
   <div class="tiles">
     <div class="tile"><div class="v">5</div><div class="l">features tracked</div></div>
     <div class="tile accent"><div class="v">0</div><div class="l">in review</div></div>
-    <div class="tile"><div class="v">4</div><div class="l">planned</div></div>
-    <div class="tile good"><div class="v">1</div><div class="l">done</div></div>
+    <div class="tile"><div class="v">3</div><div class="l">planned</div></div>
+    <div class="tile good"><div class="v">2</div><div class="l">done</div></div>
   </div>
 </section>
 
@@ -198,7 +198,7 @@
           <td><code>llama-migration</code> &mdash; Phase 1 switchover</td>
           <td><span class="chip bytes">byte-identical</span></td>
           <td>icpp-binaryen, llama_cpp_canister</td>
-          <td><span class="chip planned">planned</span></td>
+          <td><span class="chip done">done</span></td>
         </tr>
         <tr>
           <td class="id">03</td>
@@ -246,7 +246,7 @@
   </div>
 
   <div class="feature">
-    <h3><span class="fid">02</span> llama-migration <span class="chip planned">planned</span></h3>
+    <h3><span class="fid">02</span> llama-migration <span class="chip done">done</span></h3>
     <p>
       Phase 1 (HANDOVER &sect;4): llama_cpp_canister replaces
       <code>binaryen.py==0.0.2</code> with <code>icpp-binaryen==116.0.0</code> in
@@ -255,7 +255,10 @@
       <code>fix_globals_limit</code> call; the Dockerfile.base relink + sed hack is
       deleted (host-side Linux builds start working). Also lands the
       <code>downstream-verify-api</code> / <code>downstream-verify-full</code> make
-      targets in this repo. Byte-identical: no new WASM-HASHES row, verified
+      targets in this repo. <strong>Merged 2026-09-21:</strong>
+      <a href="https://github.com/icppWorld/icpp-binaryen/pull/3">icpp-binaryen #3</a>
+      and <a href="https://github.com/onicai/llama_cpp_canister/pull/33">llama #33</a>,
+      shipped in llama v0.18.0. Byte-identical: no new WASM-HASHES row, verified
       by rebuild.
     </p>
     <div class="facts">
