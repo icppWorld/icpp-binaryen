@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased (116.0.0)
+## 116.0.0 (2026-09-21)
 
 - Initial release, bundling official Binaryen 116 (macOS x86_64/arm64
   dylibs as-is; Linux x86_64 relinked from the official static archive).
