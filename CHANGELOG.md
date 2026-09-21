@@ -1,5 +1,18 @@
 # Changelog
 
+## 116.0.1 (2026-09-21)
+
+- **Fix the macOS wheel tags.** 116.0.0 tagged both macOS wheels
+  `..._universal2`, but each bundles the single-arch libbinaryen downloaded
+  for the runner it was built on. pip could not tell them apart and resolved
+  on the macOS version alone, handing the arm64 dylib to Intel macs:
+  `incompatible architecture (have 'arm64', need 'x86_64')`. The wheels are
+  now tagged `macosx_10_14_x86_64` and `macosx_11_0_arm64`. Intel macOS users
+  of 116.0.0 must upgrade; no API change.
+- `make pypi-build` now verifies that every wheel's platform tag matches the
+  architecture of the library inside it (`scripts/check_wheel_arch.py`), so a
+  tag that misdescribes its payload can no longer be published.
+
 ## 116.0.0 (2026-09-21)
 
 - Initial release, bundling official Binaryen 116 (macOS x86_64/arm64
