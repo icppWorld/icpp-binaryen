@@ -126,3 +126,12 @@ downstream-verify-full: downstream-verify-api
 pypi-build:
 	rm -rf dist
 	python -m build --wheel
+	$(MAKE) check-wheel-arch
+
+# The wheel filename is a promise about the libbinaryen inside it. Verify it,
+# because a tag that lies makes pip hand the wrong dylib to the wrong machine.
+.PHONY: check-wheel-arch
+check-wheel-arch:
+	@echo "---"
+	@echo "check-wheel-arch"
+	python -m scripts.check_wheel_arch
