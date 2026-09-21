@@ -3,10 +3,11 @@
 Runs fix_globals_limit on a real llama_cpp_canister artifact and compares the
 output sha256 against the recorded golden (test/parity/golden-116.json).
 
-How the golden was established (2026-09-16, macOS arm64): fix_globals_limit
-output on llama_cpp_before_opt.wasm is byte-identical to running the exact
-same C API sequence through binaryen.py==0.0.2 (the package icpp-binaryen
-replaces) on the same input.
+How the golden was established (macOS arm64): fix_globals_limit output on
+llama_cpp_before_opt.wasm is byte-identical to running the exact same C API
+sequence through binaryen.py==0.0.2 (the package icpp-binaryen replaces) on
+the same input. First recorded 2026-09-16; re-established 2026-09-21 against
+a rebuilt llama artifact, again byte-identical.
 
 NOTE: llama's final build/llama_cpp.wasm is NOT a valid comparison target —
 icpp-pro appends metadata custom sections (icp:public candid:service,
