@@ -143,7 +143,7 @@ version, and for any change that could touch the emitted bytes:
 make parity-test
 ```
 
-This runs a real `*_before_opt.wasm` artifact through this tree's
+This runs a real `*_before_opt_internal.wasm` artifact through this tree's
 `fix_globals_limit` and asserts the output bytes against the recorded golden
 hash (established at `116.0.0` against `binaryen.py==0.0.2` — see
 README-release-guide.md). Byte-identical means downstream migrates without a

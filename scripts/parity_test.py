@@ -3,16 +3,22 @@
 Runs fix_globals_limit on a real llama_cpp_canister artifact and compares the
 output sha256 against the recorded golden (test/parity/golden-116.json).
 
-How the golden was established (macOS arm64): fix_globals_limit output on
-llama_cpp_before_opt.wasm is byte-identical to running the exact same C API
-sequence through binaryen.py==0.0.2 (the package icpp-binaryen replaces) on
-the same input. First recorded 2026-09-16; re-established 2026-09-21 against
-a rebuilt llama artifact, again byte-identical.
+The input is the pre-optimize backup that icpp-pro's built-in globals-fix step
+writes beside the build; since icpp-pro 6.2.0 it is named
+llama_cpp_before_opt_internal.wasm. Before 6.2.0 the same bytes came from
+llama_cpp_canister's own post_wasm_function hook, as llama_cpp_before_opt.wasm.
+
+How the golden was established (macOS arm64): fix_globals_limit output on that
+artifact is byte-identical to running the exact same C API sequence through
+binaryen.py==0.0.2 (the package icpp-binaryen replaces) on the same input.
+First recorded 2026-09-16; re-established 2026-09-21 against a rebuilt llama
+artifact, again byte-identical.
 
 NOTE: llama's final build/llama_cpp.wasm is NOT a valid comparison target —
 icpp-pro appends metadata custom sections (icp:public candid:service,
-cdk:name, ...) AFTER the post_wasm_function hook runs. Byte-identical hook
-output still implies an unchanged final wasm hash downstream.
+cdk:name, ...) AFTER the built-in fix, and after any post_wasm_function.
+Byte-identical fix output still implies an unchanged final wasm hash
+downstream.
 
 Run from the repo root: python -m scripts.parity_test  (or `make parity-test`)
 Pass --write-golden to (re)record the golden after independent verification.
@@ -28,7 +34,9 @@ from pathlib import Path
 
 ROOT_PATH = Path(__file__).parent.parent.resolve()
 GOLDEN_PATH = ROOT_PATH / "test/parity/golden-116.json"
-DEFAULT_WASM = ROOT_PATH.parent / "llama_cpp_canister/build/llama_cpp_before_opt.wasm"
+DEFAULT_WASM = (
+    ROOT_PATH.parent / "llama_cpp_canister/build/llama_cpp_before_opt_internal.wasm"
+)
 
 
 def sha256_of(path: Path) -> str:
@@ -43,7 +51,7 @@ def main() -> int:
         "--wasm",
         type=Path,
         default=DEFAULT_WASM,
-        help="input wasm (default: sibling llama_cpp_before_opt.wasm)",
+        help="input wasm (default: sibling llama_cpp_before_opt_internal.wasm)",
     )
     parser.add_argument(
         "--write-golden",
@@ -64,7 +72,7 @@ def main() -> int:
 
     input_sha = sha256_of(args.wasm)
     with tempfile.TemporaryDirectory() as tmp:
-        work = Path(tmp) / args.wasm.name.replace("_before_opt", "")
+        work = Path(tmp) / args.wasm.name.replace("_before_opt_internal", "")
         shutil.copy(args.wasm, work)
         report = fix_globals_limit(work)
         print(report.summary())
@@ -98,7 +106,7 @@ def main() -> int:
     golden = json.loads(GOLDEN_PATH.read_text(encoding="utf-8"))
     if input_sha != golden["input_sha256"]:
         print("ERROR: the input wasm differs from the one the golden was")
-        print("recorded against (a rebuild changed llama_cpp_before_opt.wasm).")
+        print("recorded against (a rebuild changed the _before_opt_internal wasm).")
         print("Re-establish parity, then rerun with --write-golden.")
         return 1
     if output_sha != golden["output_sha256"]:

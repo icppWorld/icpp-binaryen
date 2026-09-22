@@ -104,7 +104,7 @@ downstream-verify-api: check-downstream-pins downstream-install-dev
 # The release tier: the API tier plus the byte-level gates -- the parity golden
 # and the wasm-hash-sensitive docker build with its prebuilt-wasm pytest
 # (heavy: docker + models). parity-test runs here rather than in the API tier
-# because it needs the _before_opt artifact the build above produces.
+# because it needs the _before_opt_internal artifact the build above produces.
 #
 # NOTE: parity-test exits 0 when that artifact is absent, printing
 # PARITY SKIPPED -- a green run is not by itself proof.
