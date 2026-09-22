@@ -221,9 +221,12 @@ Resolved 2026-09-16 (feature `01 initial-package`, see `todo/feature-inventory.h
 3. **Python floor**: **`>=3.11`**, matching icpp-pro's documented support matrix.
 4. **Where the parity-test wasm fixture lives**: **neither checked in nor fetched.**
    `make parity-test` uses the sibling checkout's
-   `../llama_cpp_canister/build/llama_cpp_before_opt.wasm` and compares against the
-   recorded golden hashes in `test/parity/golden-116.json` (input + output sha256).
-   Parity vs `binaryen.py==0.0.2` was verified byte-identical on macOS arm64 on
-   2026-09-16. NOTE: llama's final `build/llama_cpp.wasm` is NOT a valid comparison
-   target — icpp-pro appends metadata custom sections (`icp:public candid:service`,
-   `cdk:name`) after the post_wasm hook runs.
+   `../llama_cpp_canister/build/llama_cpp_before_opt_internal.wasm` — the backup
+   icpp-pro's built-in globals-fix step writes (6.2.0+; before that, llama's own
+   `post_wasm_function` hook wrote the same bytes as `llama_cpp_before_opt.wasm`).
+   It compares against the recorded golden hashes in `test/parity/golden-116.json`
+   (input + output sha256). Parity vs `binaryen.py==0.0.2` was verified
+   byte-identical on macOS arm64 on 2026-09-16. NOTE: llama's final
+   `build/llama_cpp.wasm` is NOT a valid comparison target — icpp-pro appends
+   metadata custom sections (`icp:public candid:service`, `cdk:name`) after the
+   built-in fix, and after any post_wasm hook.
